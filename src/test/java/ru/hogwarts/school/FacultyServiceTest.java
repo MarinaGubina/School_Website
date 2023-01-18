@@ -1,58 +1,77 @@
-/* package ru.hogwarts.school;
+package ru.hogwarts.school;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class FacultyServiceTest {
 
-    private final FacultyService facultyService = new FacultyService(facultyRepository);
-    private final Faculty faculty1 = new Faculty("Гриффиндор", "желтый",0L);
-    private final Faculty faculty2 = new Faculty("Слизерин", "зеленый",0L);
-    private final Faculty faculty3 = new Faculty("Пуффендуй", "желтый",0L);
-    private final Faculty faculty4 = new Faculty("Когтевран", "синий",0L);
+    @Mock
+    private FacultyRepository facultyRepository;
+
+    @InjectMocks
+    private FacultyService facultyService;
+
+    private Faculty f1 = new Faculty();
+    private Faculty f2 = new Faculty();
 
     @BeforeEach
     public void setUp(){
-        facultyService.createFaculty(faculty1);
-        facultyService.createFaculty(faculty2);
-        facultyService.createFaculty(faculty3);
-    }
+        f1.setId(1L);
+        f1.setName("Test1");
+        f1.setColor("green");
 
+        f2.setId(2L);
+        f2.setName("Test2");
+        f2.setColor("green");
+    }
     @Test
     public void shouldAddFaculty(){
-        Faculty actualFaculty = facultyService.createFaculty(faculty4);
-        assertEquals(new Faculty("Когтевран", "синий",4L),actualFaculty);
+        when(facultyRepository.save(f1)).thenReturn(f1);
+        assertEquals(f1,facultyService.createFaculty(f1));
     }
-
     @Test
-    public void shouldGetFacultyById(){
-        assertEquals(faculty1,facultyService.getFacultyById(1L));
+    public void shouldGetExistFacultyById(){
+        when(facultyRepository.findById(2L)).thenReturn(Optional.of(f2));
+        assertEquals(f2,facultyService.getFacultyById(2L));
     }
-
     @Test
-    public void shouldChangeFaculty(){
-        Faculty newFaculty = facultyService.updateFaculty(new Faculty("Новый факультет","цвет",2L));
-        assertEquals(new Faculty("Новый факультет","цвет",2L), newFaculty);
+    public void shouldGetNotExistFacultyById(){
+        Faculty expected = new Faculty();
+        when(facultyRepository.findById(anyLong())).thenReturn(Optional.of(expected));
+        assertEquals(expected,facultyService.getFacultyById(1L));
     }
-
     @Test
-    public void shouldDeleteFaculty(){
-        assertEquals(faculty2, facultyService.deleteFaculty(2L));
+    public void shouldChangeExistFaculty(){
+        when(facultyRepository.findById(anyLong())).thenReturn(Optional.of(f1));
+        when(facultyRepository.save(f1)).thenReturn(f1);
+        assertEquals(f1,facultyService.updateFaculty(f1));
+    }
+    @Test
+    public void shouldChangeNotExistFaculty(){
+        when(facultyRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertEquals(null,facultyService.updateFaculty(f2));
     }
 
     @Test
     public void shouldGetListFacultyByColor(){
-        Collection<Faculty> expected1 = List.of(faculty1,faculty3);
-        assertEquals(expected1,facultyService.filterFacultyByColor("желтый"));
-        Collection<Faculty> expected2 = List.of(faculty2);
-        assertEquals(expected2,facultyService.filterFacultyByColor("зеленый"));
+        Collection<Faculty> filter = List.of(f1,f2);
+        when(facultyRepository.findByColor("green")).thenReturn(List.of(f1,f2));
+        assertEquals(filter,facultyService.filterFacultyByColor("green"));
     }
 }
-*/

@@ -24,7 +24,11 @@ public class FacultyService {
     }
 
     public Faculty updateFaculty(Faculty faculty){
-        return facultyRepository.save(faculty);
+        if(facultyRepository.findById(faculty.getId()).isPresent()){
+            return facultyRepository.save(faculty);
+        }
+        else{
+            return null;}
     }
 
     public void deleteFaculty(Long id){

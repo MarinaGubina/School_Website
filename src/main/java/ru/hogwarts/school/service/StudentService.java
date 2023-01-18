@@ -24,7 +24,11 @@ public class StudentService {
     }
 
     public Student updateStudent(Student student){
-        return studentRepository.save(student);
+        if(studentRepository.findById(student.getStudentId()).isPresent()){
+        return studentRepository.save(student);}
+        else{
+            return null;
+        }
     }
 
     public void deleteStudent(Long id){
