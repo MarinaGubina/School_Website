@@ -30,7 +30,16 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Faculty> getStudent(@PathVariable Long id){
+    public ResponseEntity<Student> getStudent(@PathVariable Long id){
+        Student student = studentService.getStudentById(id);
+        if(student == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(student);
+    }
+
+    @GetMapping("/faculty/{id}")
+    public ResponseEntity<Faculty> getFacultyStudent(@PathVariable Long id){
         Student student = studentService.getStudentById(id);
         if(student == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -54,7 +63,7 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/filter")
     public ResponseEntity<Collection<Student>> findStudentByAge(@RequestParam(required = false, defaultValue = "0") int age,
                                                                    @RequestParam(required = false, defaultValue = "0") int min,
                                                                    @RequestParam(required = false, defaultValue = "0") int max){
