@@ -71,8 +71,12 @@ public class StudentController {
             return ResponseEntity.ok(studentService.filterStudentsByAge(age));
         }
         if(max > min && max > 0 && min > 0 ){
-            return ResponseEntity.ok(studentRepository.findByAgeBetween(min,max));
+            return ResponseEntity.ok(studentService.findByAgeBetween(min,max));
         }
         return ResponseEntity.ok(Collections.emptyList());
+    }
+    @GetMapping
+    public ResponseEntity<Collection<Student>> findAllStudents(){
+        return ResponseEntity.ok(studentService.findAllStudents());
     }
 }
