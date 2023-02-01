@@ -29,7 +29,7 @@ public class StudentController {
         return studentService.createStudent(student);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable Long id){
         Student student = studentService.getStudentById(id);
         if(student == null){
@@ -57,7 +57,7 @@ public class StudentController {
         return ResponseEntity.ok(updateStudent);
     }
 
-    @DeleteMapping ("{id}")
+    @DeleteMapping ("/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable Long id){
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
