@@ -44,4 +44,13 @@ public class StudentService {
     public Collection<Student> findAllStudents(){
         return studentRepository.findAll();
     }
+    public Integer getCountStudents(){
+        return studentRepository.getCountOfAllStudents();
+    }
+    public Double getAverageAge(){
+        return studentRepository.getAverageAge();
+    }
+    public Collection<Student> getLastFiveStudent(){
+        return studentRepository.getLastFiveStudents();
+    }
 }
