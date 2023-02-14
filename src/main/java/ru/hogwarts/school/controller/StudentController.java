@@ -8,9 +8,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @RequestMapping("/student")
 @RestController
@@ -39,7 +37,7 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @GetMapping("/faculty/{id}")
+    @GetMapping("/{id}/faculty")
     public ResponseEntity<Faculty> getFacultyStudent(@PathVariable Long id){
         Student student = studentService.getStudentById(id);
         if(student == null){
@@ -84,17 +82,31 @@ public class StudentController {
     public ResponseEntity<Integer> getCountStudents(){
         return ResponseEntity.ok(studentService.getCountStudents());
     }
+
     @GetMapping("/average-age")
     public ResponseEntity<Double> getAverageAge(){
         return ResponseEntity.ok(studentService.getAverageAge());
     }
-    @GetMapping("/last-student")
+
+    @GetMapping("/five-last-student")
     public ResponseEntity<Collection<Student>> getLastStudents(){
         return ResponseEntity.ok(studentService.getLastFiveStudent());
     }
-    @GetMapping("/name/{name}")
+
+    @GetMapping("/{name}")
     public ResponseEntity<List<Student>> getStudentByName(@PathVariable String name){
         List<Student> students = studentService.getStudentsByName(name);
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/sort-by-name")
+    public ResponseEntity<Collection<String>> getStudentSortByNameStartingWithA(){
+        Collection<String> studentsName = studentService.getSortedStudentByName();
+        return ResponseEntity.ok(studentsName);
+    }
+
+    @GetMapping("/average-age-second")
+    public ResponseEntity<Double> getAverageAge2(){
+        return ResponseEntity.ok(studentService.getAverageAge2());
     }
 }

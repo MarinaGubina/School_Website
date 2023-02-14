@@ -9,6 +9,7 @@ import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 @RequestMapping("/faculty")
 @RestController
@@ -34,7 +35,7 @@ public class FacultyController {
         return ResponseEntity.ok(faculty);
     }
 
-    @GetMapping("/students/{id}")
+    @GetMapping("/{id}/students")
     public ResponseEntity<Collection<Student>> getAllStudentsFromFaculty(@PathVariable Long id){
         Faculty faculty = facultyService.getFacultyById(id);
         Collection<Student> students = faculty.getStudents();
@@ -80,5 +81,19 @@ public class FacultyController {
     public ResponseEntity<Collection<Faculty>> findByNameAndColor(@PathVariable String name,
                                                                   @PathVariable String color){
         return ResponseEntity.ok(facultyService.findByColorAndName(name,color));
+    }
+
+    @GetMapping("/longest-name-faculty")
+    public ResponseEntity<String> getLongestNameOfTheFaculty(){
+        return ResponseEntity.ok(facultyService.getLongestNameOfFaculty());
+    }
+
+    @GetMapping("/sum")
+    public ResponseEntity<Integer> getSum(){
+        int sum = Stream.iterate(1,a -> a+1)
+                .limit(1_000_000)
+                .parallel()
+                .reduce(0,(a,b) -> a + b);
+        return ResponseEntity.ok(sum);
     }
 }

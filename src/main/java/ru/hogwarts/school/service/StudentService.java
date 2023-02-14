@@ -8,6 +8,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.OptionalDouble;
 
 @Service
 public class StudentService {
@@ -73,5 +74,24 @@ public class StudentService {
     public List<Student> getStudentsByName(String name){
         logger.info("Was invoked method for get student by name");
         return studentRepository.getStudentsByName(name);
+    }
+
+    public Collection<String> getSortedStudentByName() {
+        return  studentRepository.findAll()
+                .stream()
+                .parallel()
+                .map((s) -> s.getName().toUpperCase())
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .toList();
+    }
+
+    public Double getAverageAge2(){
+        return studentRepository.findAll()
+                .stream()
+                .parallel()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElseThrow(RuntimeException::new);
     }
 }
