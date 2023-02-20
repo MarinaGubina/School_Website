@@ -31,11 +31,11 @@ public class StudentServiceTest {
 
     @BeforeEach
     public void setUp(){
-        s1.setStudentId(1L);
+        s1.setId(1L);
         s1.setName("Test1");
         s1.setAge(20);
 
-        s2.setStudentId(2L);
+        s2.setId(2L);
         s2.setName("Test2");
         s2.setAge(22);
     }
