@@ -109,4 +109,14 @@ public class StudentController {
     public ResponseEntity<Double> getAverageAge2(){
         return ResponseEntity.ok(studentService.getAverageAge2());
     }
+
+    @GetMapping("/multithreading-output-students")
+    public void getStudentsInConsole(){
+        studentService.getAllStudentsInConsole();
+    }
+
+    @GetMapping("/multithreading-output-students-sync")
+    public void getStudentsInConsoleSync(){
+        studentService.getAllStudentsInConsoleSync();
+    }
 }
